@@ -84,7 +84,33 @@ This is the first vertical slice and should be working before moving to the next
 
  *
 
-## B. Image → Video
+## B. Image Editing / Variation
+
+User selects an existing image and describes the change.
+
+Example:
+
+> Change the background to a modern Tokyo street at night.
+
+Flow:
+
+**Existing image → Edit instruction → Generate → New image → Save**
+
+The original image remains available.
+
+Requirements:
+
+*   Real image editing/generation
+*   Original → edited relationship
+*   Loading state
+*   Error/retry
+*   Download
+*   Save
+*   Ability to continue editing the new result
+
+ *
+
+## C. Image → Video
 
 User selects:
 
@@ -113,29 +139,18 @@ Requirements:
 
  *
 
-## C. Image Editing / Variation
+## D. Image Upload
 
-User selects an existing image and describes the change.
-
-Example:
-
-> Change the background to a modern Tokyo street at night.
-
-Flow:
-
-**Existing image → Edit instruction → Generate → New image → Save**
-
-The original image remains available.
+Users can upload an image for editing or image-to-video.
 
 Requirements:
 
-*   Real image editing/generation
-*   Original → edited relationship
-*   Loading state
-*   Error/retry
-*   Download
-*   Save
-*   Ability to continue editing the new result
+*   Common image formats
+*   Reasonable file-size validation
+*   Upload loading/error states
+*   Store uploaded assets in Supabase Storage
+
+Do not build advanced asset management.
 
  *
 
@@ -262,7 +277,9 @@ Avoid:
 
 # 9\. AI Architecture
 
-Use a provider abstraction so the application isn’t tightly coupled to one provider.
+Use **lightweight provider interfaces** so AI integrations can be replaced without changing application/business logic.
+
+Do not build a generalized multi-provider framework.
 
 ### Image generation / editing
 
@@ -399,6 +416,8 @@ Out of scope:
 *   Dozens of specialized AI tools
 *   Complex project management
 *   Every Higgsfield app
+*   Advanced asset management
+*   Generalized multi-provider infrastructure
 
 These features are deliberately excluded so the core product can actually work.
 
@@ -484,7 +503,7 @@ Reuse / download
 *   Supabase setup
 *   Generation data model
 *   Storage setup
-*   Provider abstraction
+*   Lightweight provider interfaces
 *   Initial deployment
 
 ## Phase 2 — Image Generation
@@ -495,19 +514,21 @@ Build the complete vertical slice:
 
 Do not move on until this works end-to-end.
 
-## Phase 3 — Image → Video
-
-Add:
-
-**Image → motion prompt → async video generation → storage → playback**
-
-## Phase 4 — Image Editing
+## Phase 3 — Image Editing
 
 Add:
 
 **Existing image → edit instruction → new image → persistence**
 
-## Phase 5 — Creations
+Reuse the existing image-generation, storage, and persistence infrastructure.
+
+## Phase 4 — Image → Video
+
+Add:
+
+**Image → motion prompt → async video generation → storage → playback**
+
+## Phase 5 — My Creations
 
 Connect all generations to:
 
@@ -538,7 +559,22 @@ Only if everything above is stable.
 
  *
 
-# 15\. Assignment Success Criteria
+# 15\. Time-Boxing Rule
+
+The assignment prioritizes **working product over infrastructure completeness**.
+
+If a provider, feature, or technical issue becomes unreliable or consumes disproportionate time:
+
+1. Simplify the implementation.
+2. Reduce the feature scope.
+3. Defer the feature if necessary.
+4. Protect the quality and reliability of the existing P0 flows.
+
+Do not spend a large portion of the assignment building infrastructure that does not improve the reviewer experience.
+
+ *
+
+# 16\. Assignment Success Criteria
 
 The assignment explicitly judges:
 
@@ -568,7 +604,7 @@ The shipped product should be good to use:
 
  *
 
-# 16\. Final Reviewer Experience
+# 17\. Final Reviewer Experience
 
 The ideal reviewer journey is:
 
